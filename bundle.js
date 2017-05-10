@@ -1,7 +1,59 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+//what does a ball need: height, width, color, x, y, size, speed: velX and speed:velY, update and render
+//update: update: functon(){
+   //this.x = this.x + this.velX
+   //this.y += this.velY
+//}
+
+//render:
+
+//export it
+// can also use var canvas = document.getElementById("canvas");
+var width = window.innerWidth * 0.9;
+var height = window.innerHeight * 0.9;
+
+var ball = {
+  x: 100,
+  y: 100,
+  w: 30,
+  h: 30,
+  velX: 2,
+  velY: 2,
+
+  update: function(){
+    this.x += this.velX
+    this.y += this.velY
+    if (this.x >= width) {
+      this.velX = this.velX * -1
+    }
+    if (this.y >= height || this.y <= 0) {
+      this.velY = this.velY * -1
+    }
+    if (this.detectCollisions(paddle)) {
+      this.velX *= -1;
+    }
+  },
+
+  render: function(ctx) {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+  },
+
+detectCollisions(paddle){
+
+}
+
+};
+
+module.exports = ball;
+
+},{}],2:[function(require,module,exports){
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var player = require('./paddle.js');
+canvas.width = window.innerWidth * 0.9;
+canvas.height = window.innerHeight * 0.9;
+var ball = require('./ball.js');
 
 gameLoop();
 function gameLoop(){
@@ -9,23 +61,31 @@ function gameLoop(){
   ctx.fillRect(0,0, canvas.width, canvas.height);
 player.update();
 player.render(ctx);
+ball.update();
+ball.render(ctx);
   window.requestAnimationFrame(gameLoop);
 }
 
-},{"./paddle.js":2}],2:[function(require,module,exports){
+},{"./ball.js":1,"./paddle.js":3}],3:[function(require,module,exports){
 var paddle = {
   x: 100,
   y: 100,
-  w: 30,
-  h: 100,
-  speed: 2,
-  
+  w: 40,
+  h: 200,
+  speed: 10,
+
   update: function(){
     if (this.direction === "up") {
       this.y = this.y -this.speed;
     }
     if (this.direction === "down") {
       this.y += this.speed;
+    }
+    if (this.direction === "left") {
+      this.x = this.x - this.speed;
+    }
+    if (this.direction === "right") {
+      this.x += this.speed;
     }
   },
   render: function(ctx){
@@ -38,12 +98,14 @@ document.addEventListener('keydown', function(e){
   console.log(e.keyCode);
   if (e.keyCode === 38) paddle.direction = "up";
   else if (e.keyCode === 40) paddle.direction = "down";
+  else if (e.keyCode === 37) paddle.direction = "left";
+  else if (e.keyCode === 39) paddle.direction = "right";
 });
 
 document.addEventListener('keyup', function(e){
-  if (e.keyCode === 38 || e.keyCode === 40) paddle.direction = null;
+  if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 37 || e.keyCode === 39) paddle.direction = null;
 });
 
 module.exports = paddle;
 
-},{}]},{},[1]);
+},{}]},{},[2]);
