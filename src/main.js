@@ -9,9 +9,10 @@ gameLoop();
 function gameLoop(){
   ctx.fillStyle = "#ff0000";
   ctx.fillRect(0,0, canvas.width, canvas.height);
-player.update();
-player.render(ctx);
-ball.update();
-ball.render(ctx);
+  player.update();
+  player.render(ctx);
+  ball.update(player);
+  ball.render(ctx);
+
   window.requestAnimationFrame(gameLoop);
 }

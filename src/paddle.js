@@ -3,7 +3,7 @@ var paddle = {
   y: 100,
   w: 40,
   h: 200,
-  speed: 10,
+  speed: 12,
 
   update: function(){
     if (this.direction === "up") {
